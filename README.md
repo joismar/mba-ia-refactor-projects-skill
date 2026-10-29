@@ -118,6 +118,13 @@
 - **Impact:** Isso degrada a performance à medida que o volume de dados cresce, gerando maior latência e maior carga no banco de dados.
 - **Recommendation:** Utilizar `joinedload`/`relationship` quando necessário, aplicar paginação com `limit` e `offset`, e consolidar consultas agregadas em relatórios.
 
+#### CORS Liberado para Qualquer Origem
+- **Severity:** MEDIUM
+- **Description:** O middleware de CORS é registrado sem qualquer restrição de origem (`CORS(app)`), liberando a API para requisições vindas de qualquer domínio.
+- **File(s):** `app.py:15`.
+- **Impact:** Qualquer site pode consumir a API em nome dos usuários e contornar a política de mesma origem do navegador; além disso, não há como restringir a API ao front-end oficial quando ela for publicada em produção.
+- **Recommendation:** Declarar explicitamente as origens permitidas por ambiente (`CORS(app, resources={r"/api/*": {"origins": [...]}})`) e remover o middleware onde ele não for necessário.
+
 #### Respostas da API sem Padrão e Validações Duplicadas
 - **Severity:** LOW
 - **Description:** Cada rota retorna estruturas diferentes e reimplementa regras de validação repetidamente, em vez de centralizar respostas e regras de contrato da API.
